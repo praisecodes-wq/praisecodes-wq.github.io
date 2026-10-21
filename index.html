@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praise Adelekun | Freelance Web Developer</title>
+  <meta name="description" content="Praise Adelekun, Financial Technology student at FUTA and freelance web developer.">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --surface: #131d2f;
+      --text: #e6edf7;
+      --muted: #9aa8bd;
+      --accent: #f5c542;
+      --border: #22304a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 1.25rem; }
+
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(11, 18, 32, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-weight: 700; color: var(--text); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+    .menu-btn {
+      display: none; background: none; border: 1px solid var(--border);
+      color: var(--text); padding: 0.4rem 0.7rem; border-radius: 6px; cursor: pointer;
+    }
+
+    /* 3D background scene */
+    .scene {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden; perspective: 900px;
+      background: radial-gradient(ellipse at 50% 0%, #1d3157 0%, var(--bg) 65%);
+    }
+    .grid-floor {
+      position: absolute; left: -50%; right: -50%; bottom: -10%; height: 75%;
+      background-image:
+        linear-gradient(rgba(245, 197, 66, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 197, 66, 0.2) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: rotateX(65deg); transform-origin: bottom;
+      -webkit-mask-image: linear-gradient(to top, #000 20%, transparent 85%);
+              mask-image: linear-gradient(to top, #000 20%, transparent 85%);
+      animation: drift 10s linear infinite;
+    }
+    @keyframes drift {
+      from { background-position: 0 0; }
+      to { background-position: 0 60px; }
+    }
+    .orb {
+      position: absolute; border-radius: 50%; opacity: 0.55;
+      background: radial-gradient(circle at 30% 30%, #ffe89a, var(--accent) 35%, #6b4e0c 80%);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset -12px -16px 30px rgba(0, 0, 0, 0.4);
+      animation: float 9s ease-in-out infinite;
+    }
+    .orb.o1 { width: 220px; height: 220px; top: 10%; left: 5%; }
+    .orb.o2 { width: 130px; height: 130px; top: 55%; right: 8%; animation-delay: -3s; }
+    .orb.o3 { width: 70px; height: 70px; top: 22%; right: 20%; animation-delay: -6s; }
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      50% { transform: translate3d(0, -30px, 80px) rotate(8deg); }
+    }
+
+    /* 3D depth on cards */
+    .card {
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      background: rgba(19, 29, 47, 0.85);
+    }
+    .card:hover {
+      transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .grid-floor, .orb { animation: none; }
+    }
+
+    .hero { padding: 6rem 0 4rem; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: var(--muted); max-width: 620px; margin-bottom: 2rem; }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.4rem; border-radius: 8px;
+      font-weight: 600; margin-right: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .btn-primary { background: var(--accent); color: #111; }
+    .btn-primary:hover { text-decoration: none; opacity: 0.9; }
+    .btn-outline { border: 1px solid var(--accent); color: var(--accent); }
+    .btn-outline:hover { text-decoration: none; background: rgba(245, 197, 66, 0.1); }
+
+    section { padding: 4rem 0; border-top: 1px solid var(--border); }
+    h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .section-intro { color: var(--muted); margin-bottom: 2rem; }
+
+    .about-text p { color: var(--muted); margin-bottom: 1rem; max-width: 720px; }
+
+    .skills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .skill {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 0.9rem;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column;
+    }
+    .card h3 { margin-bottom: 0.5rem; }
+    .card p { color: var(--muted); font-size: 0.95rem; flex-grow: 1; margin-bottom: 1rem; }
+    .tag { font-size: 0.8rem; color: var(--accent); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card a.link { font-weight: 600; }
+    .shot {
+      width: 100%; height: 240px; object-fit: cover; object-position: top;
+      border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border);
+    }
+
+    .contact-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; text-align: center;
+    }
+    .contact-box p { color: var(--muted); margin-bottom: 1.5rem; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--muted); font-size: 0.9rem; text-align: center; }
+
+    @media (max-width: 720px) {
+      .menu-btn { display: block; }
+      .nav-links {
+        display: none; position: absolute; top: 64px; left: 0; right: 0;
+        flex-direction: column; gap: 0; background: var(--bg);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a { display: block; padding: 0.9rem 1.25rem; }
+      .hero { padding: 4rem 0 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scene" aria-hidden="true">
+    <div class="grid-floor"></div>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+  </div>
+
+  <header>
+    <nav class="container nav">
+      <a href="#top" class="logo">Praise Adelekun</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">Menu</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#design">Design</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="container hero">
+      <h1>Hi, I'm <span>Praise</span>.<br>I build clean, functional websites.</h1>
+      <p>Financial Technology student at the Federal University of Technology Akure (FUTA) and freelance web developer creating responsive, animated, and user-friendly sites with HTML, CSS, and JavaScript.</p>
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="https://github.com/praisecodes-wq" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <section id="about">
+      <div class="container">
+        <h2>About</h2>
+        <p class="section-intro">A bit about my background and work.</p>
+        <div class="about-text">
+          <p>I'm a Financial Technology student at FUTA. I use that background to build interfaces for digital and financial products that are easy to understand and pleasant to use.</p>
+          <p>As a freelancer, I create landing pages, business and restaurant websites, and interactive front-ends. I care about clean layouts, smooth animation, and designs that feel intentional rather than ornamental.</p>
+          <p>I'm also practicing product UI design in Figma, and I'm open to internships, freelance projects, and collaborations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <h2>Skills</h2>
+        <p class="section-intro">Tools and languages I work with.</p>
+        <div class="skills">
+          <span class="skill">HTML</span>
+          <span class="skill">CSS</span>
+          <span class="skill">JavaScript</span>
+          <span class="skill">Responsive Design</span>
+          <span class="skill">Figma</span>
+          <span class="skill">UI Design</span>
+          <span class="skill">Git &amp; GitHub</span>
+          <span class="skill">VB.NET</span>
+          <span class="skill">VBA</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <h2>Projects</h2>
+        <p class="section-intro">Selected work. Source code is on GitHub.</p>
+        <div class="grid">
+          <article class="card">
+            <div class="tag">Landing Page</div>
+            <h3>Nightfall GT</h3>
+            <p>Interactive car landing page with cinematic animations.</p>
+            <a class="link" href="https://github.com/praisecodes-wq/nightfall-gt" target="_blank" rel="noopener">View code →</a>
+          </article>
+          <article class="card">
+            <div class="tag">Business Website</div>
+            <h3>EMBER</h3>
+            <p>Full restaurant website built as a client-ready template.</p>
+            <a class="link" href="https://github.com/praisecodes-wq/ember" target="_blank" rel="noopener">View code →</a>
+          </article>
+          <article class="card">
+            <div class="tag">Portfolio</div>
+            <h3>Personal Portfolio</h3>
+            <p>Responsive portfolio with a ledger and bank-passbook theme inspired by fintech.</p>
+            <a class="link" href="https://github.com/praisecodes-wq/portfolio" target="_blank" rel="noopener">View code →</a>
+          </article>
+          <article class="card">
+            <div class="tag">Game</div>
+            <h3>Browser Chess</h3>
+            <p>Playable chess game built with HTML and JavaScript.</p>
+            <a class="link" href="https://github.com/praisecodes-wq/chess" target="_blank" rel="noopener">View code →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="design">
+      <div class="container">
+        <h2>UI Design</h2>
+        <p class="section-intro">Mobile and web interface designs I've created in Figma.</p>
+        <div class="grid">
+          <article class="card">
+            <img class="shot" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ" alt="FinPay design preview">
+            <div class="tag">Fintech App</div>
+            <h3>FinPay</h3>
+            <p>Dark-mode sign-up flow for a personal finance app.</p>
+          </article>
+          <article class="card">
+            <img class="shot" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ" alt="Checkout design preview">
+            <div class="tag">Payments</div>
+            <h3>Checkout</h3>
+            <p>Card payment screen with a bold green theme.</p>
+          </article>
+          <article class="card">
+            <img class="shot" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAYGBgYHBgcICAcKCwoLCg8ODAwODxYQERAREBYiFRkVFRkVIh4kHhweJB42KiYmKjY+NDI0PkxERExfWl98fKcBBgYGBgcGBwgIBwoLCgsKDw" alt="NexaPay design preview">
+            <div class="tag">Fintech Web &amp; App</div>
+            <h3>NexaPay</h3>
+            <p>Landing page and loan calculator screens for a payments product.</p>
+          </article>
+          <article class="card">
+            <img class="shot" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ" alt="Banklio design preview">
+            <div class="tag">Crypto Wallet</div>
+            <h3>Banklio</h3>
+            <p>Wallet onboarding and dashboard for a web3 finance app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <h2>Let's work together</h2>
+          <p>I'm available for freelance projects, internships, and collaborations.</p>
+          <a href="mailto:praiseadelekun@gmail.com" class="btn btn-primary">Email Me</a>
+          <a href="https://www.linkedin.com" class="btn btn-outline" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Praise Adelekun. Built with HTML, CSS, and JavaScript.
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    menuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
